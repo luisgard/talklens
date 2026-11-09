@@ -1,0 +1,1 @@
+{ "name": "talklens-e2e", "private": true, "type": "module", "dependencies": { "@microsoft/signalr": "8.0.7" } }

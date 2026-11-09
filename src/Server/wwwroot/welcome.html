@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>TalkLens</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/story.css">
+</head>
+<body class="story">
+  <nav class="story-bar">
+    <span class="logo" aria-hidden="true"></span> TalkLens
+    <a class="text-link" href="/?home=1" data-i18n="barLink"></a>
+  </nav>
+
+  <section class="chapter hero-chapter">
+    <h1 class="display" data-i18n="heroTitle"></h1>
+    <p class="lede" data-i18n="heroText"></p>
+    <div class="story-cta"><a class="primary" href="/?home=1" data-i18n="ctaWatch"></a><a class="secondary" href="/event" data-i18n="ctaAgenda"></a></div>
+    <div data-scene="captions"></div>
+  </section>
+
+  <section class="chapter">
+    <div class="split reveal">
+      <div>
+        <p class="kicker" data-i18n="roomsKicker"></p>
+        <h2><span class="gradient-warm" data-i18n="roomsTitle"></span></h2>
+        <p class="lede" data-i18n="roomsText"></p>
+      </div>
+      <div data-scene="rooms"></div>
+    </div>
+  </section>
+
+  <section class="chapter tint-sky">
+    <div class="split flip reveal">
+      <div>
+        <p class="kicker" data-i18n="captionsKicker"></p>
+        <h2><span class="gradient-sky" data-i18n="captionsTitle"></span></h2>
+        <p class="lede" data-i18n="captionsText"></p>
+      </div>
+      <div data-scene="captions"></div>
+    </div>
+  </section>
+
+  <section class="chapter tint-violet">
+    <div class="split reveal">
+      <div>
+        <p class="kicker" data-i18n="askKicker"></p>
+        <h2><span class="gradient-violet" data-i18n="askTitle"></span></h2>
+        <p class="lede" data-i18n="askText"></p>
+      </div>
+      <div data-scene="ask"></div>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="split flip reveal">
+      <div>
+        <p class="kicker" data-i18n="catchKicker"></p>
+        <h2><span class="gradient-warm" data-i18n="catchTitle"></span></h2>
+        <p class="lede" data-i18n="catchText"></p>
+      </div>
+      <div data-scene="catchup"></div>
+    </div>
+  </section>
+
+  <section class="chapter tint-violet">
+    <div class="split reveal">
+      <div>
+        <p class="kicker" data-i18n="findKicker"></p>
+        <h2><span class="gradient-violet" data-i18n="findTitle"></span></h2>
+        <p class="lede" data-i18n="findText"></p>
+      </div>
+      <div data-scene="search"></div>
+    </div>
+  </section>
+
+  <section class="chapter tint-mint">
+    <p class="kicker reveal" data-i18n="netKicker"></p>
+    <h2 class="reveal" data-i18n="netTitle"></h2>
+    <p class="lede reveal" data-i18n="netText"></p>
+    <div class="story-network reveal" data-network></div>
+  </section>
+
+  <section class="chapter">
+    <h2 class="reveal" data-i18n="endTitle"></h2>
+    <div class="story-cta reveal"><a class="primary" href="/?home=1" data-i18n="ctaWatch"></a><a class="secondary" href="/library" data-i18n="ctaLibrary"></a></div>
+  </section>
+
+  <script src="/ui.js"></script>
+  <script src="/story.js"></script>
+  <script src="/welcome.js"></script>
+</body>
+</html>

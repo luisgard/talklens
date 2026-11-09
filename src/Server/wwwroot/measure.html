@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TalkLens delay check</title>
+<style>
+  body { margin: 0; background: #000; color: #fff; font-family: system-ui, sans-serif; }
+  main { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px; }
+  #clock { background: #fff; color: #000; font: 700 96px/1.2 Consolas, monospace; text-align: center; padding: 40px 0; }
+  video { width: 100%; height: 280px; background: #222; object-fit: contain; }
+  button { font: inherit; padding: 8px 16px; margin: 8px; }
+  #log { font: 14px/1.4 Consolas, monospace; white-space: pre-wrap; padding: 8px; }
+</style>
+</head>
+<body>
+<main>
+  <div id="clock">00.00</div>
+  <video id="video" autoplay muted playsinline></video>
+</main>
+<button id="speak" type="button">Speak test sentences</button>
+<div id="log"></div>
+<script src="/lib/signalr.min.js"></script>
+<script src="/whep.js"></script>
+<script>
+// Delay check for the Phase 1 gate. Point the camera phone at the clock: the gap between the clock and its image in the
+// video is the video delay. The test sentences play on the laptop speakers, so they reach captions through the phone mic.
+(() => {
+  const sentences = [
+    'Hoy vamos a hablar sobre cómo funciona una red inalámbrica.',
+    'El teléfono envía el video a la computadora por el aire.',
+    'La computadora reparte ese video a todas las personas de la sala.',
+    'Los subtítulos aparecen unos segundos después de cada frase.',
+    'Si se corta el internet, un modelo local sigue escribiendo.',
+    'Las preguntas de los asistentes son privadas y no se guardan.',
+    'Al final de la charla se puede borrar toda la transcripción.',
+    'Muchas gracias a todos por venir a esta prueba de hoy.',
+  ];
+  const gapMs = 3500;
+  const $ = (id) => document.getElementById(id);
+
+  const tick = () => {
+    $('clock').textContent = ((performance.now() / 1000) % 100).toFixed(2).padStart(5, '0');
+    requestAnimationFrame(tick);
+  };
+  tick();
+  new TalkLensRtc.WhepPlayer(`/media/live/r${new URLSearchParams(location.search).get('room') || 1}/cam/whep`, $('video')).start(false);
+
+  const results = window.delayResults = [];
+  let current = null;
+  const hub = new signalR.HubConnectionBuilder().withUrl('/hub').withAutomaticReconnect().build();
+  hub.on('caption', (c) => {
+    if (!current) return;
+    const now = performance.now();
+    if (current.firstCaption === null) current.firstCaption = now;
+    if (c.final) {
+      current.lastFinal = now;
+      current.heard.push(c.text);
+    }
+  });
+  hub.start();
+
+  const say = (text) => new Promise((resolve) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-MX';
+    const voice = speechSynthesis.getVoices().find((v) => v.lang.toLowerCase().startsWith('es'));
+    if (voice) utterance.voice = voice;
+    const started = { start: null };
+    utterance.onstart = () => { started.start = performance.now(); };
+    utterance.onend = () => resolve({ start: started.start, end: performance.now() });
+    utterance.onerror = () => resolve({ start: started.start, end: performance.now(), error: true });
+    speechSynthesis.speak(utterance);
+  });
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const ms = (n) => (n === null ? 'none' : `${Math.round(n)} ms`);
+
+  $('speak').addEventListener('click', async () => {
+    $('speak').disabled = true;
+    results.length = 0;
+    for (const text of sentences) {
+      current = { firstCaption: null, lastFinal: null, heard: [] };
+      const spoken = await say(text);
+      await wait(gapMs);
+      const row = {
+        said: text,
+        heard: current.heard.join(' | '),
+        firstWordsMs: current.firstCaption === null || spoken.start === null ? null : current.firstCaption - spoken.start,
+        finalAfterEndMs: current.lastFinal === null ? null : current.lastFinal - spoken.end,
+      };
+      results.push(row);
+      $('log').textContent += `first ${ms(row.firstWordsMs)}, final ${ms(row.finalAfterEndMs)}: ${row.heard || '(nothing)'}\n`;
+    }
+    current = null;
+    $('speak').disabled = false;
+    $('log').textContent += 'Done.\n';
+  });
+})();
+</script>
+</body>
+</html>

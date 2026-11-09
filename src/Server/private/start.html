@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>TalkLens home</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/story.css">
+</head>
+<body class="console">
+  <script src="/console-nav.js"></script>
+  <section class="console-hero">
+    <div>
+      <h1 id="greeting">Your conference, on every phone.</h1>
+      <p>One laptop and one router. Follow the steps below, from top to bottom, and come back to any of them.</p>
+      <a class="text-link" href="/welcome" target="_blank" rel="noopener">See what your attendees get</a>
+    </div>
+    <div data-network></div>
+  </section>
+
+  <div id="journey"></div>
+
+  <p class="search-engine" id="search-engine" hidden><i></i><span></span></p>
+
+  <section class="card" id="qr-card">
+    <h2>What your attendees scan</h2>
+    <p class="muted">Print this or show it on a screen. They open it on their phone, with nothing to install.</p>
+    <div class="qr-grid">
+      <div class="qr" id="qr-wifi" hidden><img id="qr-wifi-img" alt="QR code to join the event Wi-Fi"><b>1. Join the Wi-Fi</b><br><span id="wifi-name"></span></div>
+      <div class="qr"><img src="/api/op/qr/event.svg" alt="QR code for the event"><b>Open the event</b><br><a id="attendee-url"></a></div>
+    </div>
+    <div class="actions"><button type="button" class="secondary" onclick="window.print()">Print</button></div>
+  </section>
+
+  <p class="muted optional-links">Only if you need them: <a href="/manage#sponsors">Sponsors</a> · <a href="/manage#settings">Privacy and access</a></p>
+  <script src="/story.js"></script>
+  <script src="/start.js"></script>
+</body>
+</html>

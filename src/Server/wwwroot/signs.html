@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>Signing avatar</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/story.css">
+</head>
+<body class="page drift">
+  <div id="page-nav"></div>
+  <header class="page-head">
+    <p class="kicker sign-badge" data-i18n="badge"></p>
+    <h1 data-i18n="title"></h1>
+    <p class="muted" data-i18n="warning"></p>
+  </header>
+
+  <div class="sign-stage card">
+    <div class="CWASAAvatar av0"></div>
+    <p id="sign-status" class="muted" aria-live="polite"></p>
+  </div>
+
+  <form id="sign-form" class="find">
+    <label class="muted" for="sign-text" data-i18n="prompt"></label>
+    <div class="find-field"><input id="sign-text" autocomplete="off" maxlength="300"></div>
+    <button class="primary wide" data-i18n="sign"></button>
+  </form>
+  <div id="sign-result" aria-live="polite"></div>
+
+  <section class="card sign-known">
+    <h2 data-i18n="knownTitle"></h2>
+    <p class="muted" data-i18n="knownText"></p>
+    <details class="sign-list">
+      <summary data-i18n="knownList"></summary>
+      <p id="sign-known" class="sign-tokens"></p>
+    </details>
+    <p class="muted sign-credit">Avatar: <a href="https://vh.cmp.uea.ac.uk/index.php/CWASA_Conditions_of_Use">CWASA</a>, Virtual Humans Group, University of East Anglia. Signs from <a href="https://github.com/SaiSriSatvic2005/Avatar-Generator-FYP-">Avatar-Generator-FYP</a> (MIT).</p>
+  </section>
+
+  <script src="/ui.js"></script>
+  <script src="/signing.js"></script>
+  <script src="/signs.js"></script>
+</body>
+</html>

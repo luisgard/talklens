@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>Live captions</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="embed">
+  <p id="caption" class="embed-caption" aria-live="polite"></p>
+  <form id="ask-form" class="composer-row">
+    <input id="question" maxlength="500" aria-label="Ask about this talk" placeholder="Ask about this talk…" autocomplete="off">
+    <button class="primary">Ask</button>
+  </form>
+  <div id="answer" class="answer-body"></div>
+  <script src="/lib/signalr.min.js"></script>
+  <script src="/embed.js"></script>
+</body>
+</html>

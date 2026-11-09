@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0e14">
+  <title>TalkLens operator</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="console">
+  <script src="/console-nav.js"></script>
+  <header class="console-head">
+    <div class="console-title">
+      <h1>Go live</h1>
+      <p class="muted">Three steps to start a talk. Each room runs its own.</p>
+    </div>
+    <span id="internet-pill" class="pill"></span>
+    <span id="attendees-pill" class="pill"></span>
+  </header>
+
+  <nav id="room-strip" class="room-strip" aria-label="Rooms"></nav>
+
+  <section class="card">
+    <div class="room-head">
+      <label for="room-name" class="sr-only">Room name</label>
+      <input id="room-name" maxlength="60" autocomplete="off">
+      <span id="talk-pill" class="pill"></span>
+      <span id="clock" class="muted"></span>
+      <button id="remove-room" class="secondary" type="button">Remove room</button>
+    </div>
+
+    <!-- Setting up: three steps, in the order they happen. -->
+    <form id="talk-form">
+      <div class="step" id="step-camera">
+        <div class="step-number">1</div>
+        <div>
+          <h3>Connect the camera</h3>
+          <p id="camera-hint">Scan this with the phone that will film the speaker.</p>
+          <div class="qr" id="camera-qr"><img id="qr-camera" alt="QR code for the camera phone"></div>
+          <button id="camera-again" class="secondary" type="button" hidden>Connect another phone</button>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div>
+          <h3>Name the talk</h3>
+          <div id="agenda-pick" hidden>
+            <label for="agenda-choice">From the agenda</label>
+            <select id="agenda-choice"></select>
+          </div>
+          <div class="field-row">
+            <div><label for="title">Title</label><input id="title" required maxlength="200" autocomplete="off"></div>
+            <div><label for="speaker">Speaker</label><input id="speaker" maxlength="200" autocomplete="off"></div>
+          </div>
+          <details class="more">
+            <summary>Language, microphone and slides</summary>
+            <div class="field-row">
+              <div>
+                <label for="language">Spoken language</label>
+                <select id="language"><option value="es">Spanish</option><option value="en">English</option></select>
+              </div>
+              <div>
+                <label for="audio-source">Audio from</label>
+                <select id="audio-source"><option value="camera">Camera phone microphone</option></select>
+              </div>
+            </div>
+            <label for="slide-source">Slides from</label>
+            <select id="slide-source">
+              <option value="none">No slides</option>
+              <option value="stream">Screen share or second phone (QR below)</option>
+              <option value="camera">Camera phone pointed at the projection</option>
+            </select>
+            <div class="qr" id="screen-qr" hidden><img id="qr-screen" alt="QR code for the slide source"><b>Slides source</b></div>
+            <label class="check"><input id="keep" type="checkbox" checked> Keep the transcript and slides afterwards</label>
+          </details>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div>
+          <h3>Go live</h3>
+          <label class="check"><input id="record" type="checkbox" checked> Record the whole talk, so people can watch it later in the library. The video stays on this laptop.</label>
+          <label class="check"><input id="auth-organizer" type="checkbox"> The organizer agrees to captions, AI help and recording for this talk</label>
+          <label class="check"><input id="auth-speaker" type="checkbox"> The speaker agrees too</label>
+          <p id="talk-error" class="error" role="alert"></p>
+          <div class="actions"><button id="start" class="primary" type="submit">Start talk</button></div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Running: what is happening, and what attendees scan. -->
+    <div id="running" class="columns" hidden>
+      <div>
+        <video id="preview" class="preview" muted autoplay playsinline></video>
+        <div id="feed" class="feed" aria-label="Latest captions"></div>
+      </div>
+      <div>
+        <div class="lights" aria-label="Status of this room">
+          <div class="light"><b>Video</b><span class="detail" id="video-detail"></span><span id="video-pill" class="pill"></span></div>
+          <div class="light"><b>Audio</b><div><span class="detail" id="audio-detail"></span><div class="meter" aria-hidden="true"><div id="audio-meter"></div></div></div><span id="audio-pill" class="pill"></span></div>
+          <div class="light"><b>Captions</b><span class="detail" id="captions-detail"></span><span id="captions-pill" class="pill"></span></div>
+          <div class="light"><b>Slides</b><span class="detail" id="slides-detail"></span><span id="slides-pill" class="pill"></span></div>
+        </div>
+        <div class="actions"><button id="stop" class="danger" type="button">End talk and stream</button></div>
+        <div class="step" id="camera-lost" style="margin-top:16px" hidden>
+          <div class="qr"><img id="qr-camera-live" alt="QR code for the camera phone"><b>Camera not connected. Scan this with the phone that films the speaker.</b></div>
+        </div>
+        <div class="step" style="margin-top:16px">
+          <div class="qr"><img id="qr-room" alt="QR code for attendees of this room"><b>Attendees of this room</b><br><a id="room-url"></a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="questions-card">
+    <h2>Questions for the speaker</h2>
+    <div id="questions"></div>
+    <details class="more" id="questions-done-box" hidden>
+      <summary id="questions-done-title"></summary>
+      <div id="questions-done"></div>
+    </details>
+    <details class="more">
+      <summary>Speaker screen</summary>
+      <p class="muted" style="font-size:14px">For a phone or screen the speaker can see. It shows only the question you choose. Its QR contains the operator key.</p>
+      <div class="qr" style="max-width:170px;margin-top:10px"><img id="qr-speaker" alt="QR code for the speaker screen"></div>
+      <a id="speaker-link" class="secondary" target="_blank" rel="noopener">Open on this device</a>
+    </details>
+  </section>
+
+  <section class="card" id="polls-card" hidden>
+    <h2>Polls</h2>
+    <p class="muted" style="font-size:14px">Ask the room something. Phones get it at once, and you see the votes here as they come in.</p>
+    <form id="poll-form">
+      <label for="poll-question">Question</label>
+      <input id="poll-question" maxlength="200" autocomplete="off" placeholder="Which topic should I go deeper on?">
+      <label for="poll-options">Answers, one per line (2 to 6)</label>
+      <textarea id="poll-options" rows="3" placeholder="Testing&#10;Deploys&#10;Monitoring"></textarea>
+      <div class="actions"><button class="primary">Send to the room</button></div>
+      <p id="poll-error" class="muted" role="alert"></p>
+    </form>
+    <div id="polls"></div>
+    <details class="more">
+      <summary>Room screen for the projector</summary>
+      <p class="muted" style="font-size:14px">Open it full screen on the computer connected to the projector. It shows the QR to join, the captions, the poll while it runs, approved photos and the room's reactions. It holds no key, and does not count as an attendee.</p>
+      <a id="screen-link" class="secondary" target="_blank" rel="noopener">Open the room screen</a>
+    </details>
+  </section>
+
+  <section class="card" id="photos-card">
+    <h2>Photo wall <span id="photos-waiting" class="badge" hidden></span></h2>
+    <p class="muted" style="font-size:14px">Photos people share from their phones. Nothing reaches the screens or the album until you approve it, unless you turned on automatic publishing in Set up. The AI checks each one first and tells you why it held one back.</p>
+    <div id="photos-pending" class="op-photos"></div>
+    <p id="photos-none" class="muted">Nothing waiting.</p>
+    <details class="more">
+      <summary id="photos-approved-title">Published</summary>
+      <div id="photos-approved" class="op-photos"></div>
+    </details>
+  </section>
+
+  <section class="card" id="chat-card">
+    <h2>Public chat of this talk</h2>
+    <p class="muted" style="font-size:14px">Remove anything that should not be there.</p>
+    <div id="chat-moderation"></div>
+  </section>
+
+  <details class="card more" id="qr-card">
+    <summary>Share the event and network</summary>
+    <div class="qr-grid">
+      <div class="qr" id="qr-wifi" hidden><img id="qr-wifi-img" alt="QR code to join the event Wi-Fi"><b>1. Join Wi-Fi</b><br><span id="wifi-name"></span></div>
+      <div class="qr"><img src="/api/op/qr/event.svg" alt="QR code for all rooms"><b>All rooms</b><br><a id="attendee-url"></a></div>
+    </div>
+    <div class="actions"><button type="button" class="secondary" onclick="window.print()">Print</button></div>
+    <details class="more">
+      <summary>Network and laptop</summary>
+      <label for="host">Address shown to phones</label>
+      <select id="host"></select>
+      <p class="muted" id="server-detail" style="margin-top:10px"></p>
+    </details>
+  </details>
+
+  <details class="card more">
+    <summary>Past talks</summary>
+    <div id="talks"></div>
+  </details>
+
+  <script src="/lib/signalr.min.js"></script>
+  <script src="/whep.js"></script>
+  <script src="/operator.js"></script>
+</body>
+</html>

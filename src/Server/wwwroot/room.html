@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>TalkLens</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="attendee">
+  <header class="topbar">
+    <a id="back" class="topbar-button" href="/" hidden>
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></svg>
+      <span class="sr-only" data-i18n="allRooms"></span>
+      <span id="others" class="badge" hidden></span>
+    </a>
+    <div class="topbar-title">
+      <h1 id="talk-title">TalkLens</h1>
+      <p id="talk-speaker" class="muted"></p>
+    </div>
+    <span id="live-pill" class="pill" data-state="waiting"></span>
+    <button id="open-settings" class="topbar-button" type="button" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      <span class="sr-only" data-i18n="settings"></span>
+    </button>
+  </header>
+
+  <p id="talk-status" class="talk-status" role="status" data-state="waiting"></p>
+
+  <section class="stage" id="stage" aria-label="Live video">
+    <video id="video" playsinline autoplay></video>
+    <button id="join" class="join" type="button">
+      <span class="join-lens"><svg viewBox="0 0 24 24" width="36" height="36" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg></span>
+      <span data-i18n="join"></span>
+    </button>
+    <div id="ended" class="stage-ended" hidden><b data-i18n="endedTitle"></b><span id="ended-detail"></span><button id="ended-meet" class="primary" type="button" data-i18n="inviteTitle" hidden></button></div>
+    <p id="stage-note" class="stage-note" hidden></p>
+    <button id="rewind" class="stage-button" type="button" hidden></button>
+    <div id="captions" class="captions" aria-hidden="true"></div>
+    <!-- In the corner of the video, like the interpreter on a news broadcast. -->
+    <div id="sign-pip" class="sign-pip" hidden><div class="CWASAAvatar av0"></div></div>
+    <div id="float-layer" class="float-layer"></div>
+  </section>
+
+  <section id="sign-panel" class="card room-sign" hidden>
+    <p id="sign-status" class="muted" aria-live="polite"></p>
+    <div id="sign-said"></div>
+  </section>
+
+  <div class="caption-language">
+    <label for="set-language" data-i18n="captionLanguage"></label>
+    <select id="set-language"></select>
+  </div>
+
+  <div id="reactions" class="reactions" role="group" hidden></div>
+
+  <p id="banner" class="banner" role="status" hidden></p>
+  <section id="invite" class="invite glass" aria-labelledby="invite-title" hidden>
+    <p><b id="invite-title" data-i18n="inviteTitle"></b><span class="muted" data-i18n="inviteText"></span></p>
+    <button id="invite-open" class="primary" type="button" data-i18n="inviteOpen"></button>
+    <button id="invite-close" class="dismiss" type="button">×</button>
+  </section>
+  <section id="poll-card" class="card poll-card" aria-live="polite" hidden></section>
+  <section id="rate-card" class="card poll-card" hidden></section>
+
+  <main class="panels">
+    <section id="panel-live" role="tabpanel" aria-labelledby="tab-live" class="panel" hidden>
+      <figure id="current-slide" class="slide-card" hidden>
+        <img id="current-slide-img" alt="">
+        <figcaption id="current-slide-time" class="muted"></figcaption>
+      </figure>
+      <p id="no-slide" class="empty" data-i18n="noSlide"></p>
+    </section>
+
+    <section id="panel-transcript" role="tabpanel" aria-labelledby="tab-transcript" class="panel">
+      <ol id="transcript" class="transcript"></ol>
+      <p id="no-transcript" class="empty" data-i18n="noTranscript"></p>
+    </section>
+
+    <section id="panel-chat" role="tabpanel" aria-labelledby="tab-chat" class="panel" hidden>
+      <div id="chat-box"></div>
+    </section>
+
+    <section id="panel-photos" role="tabpanel" aria-labelledby="tab-photos" class="panel" hidden>
+      <label class="primary photo-pick">
+        <input id="photo-file" type="file" accept="image/*" hidden>
+        <span data-i18n="photoShare"></span>
+      </label>
+      <p class="composer-note" data-i18n="photoConsent"></p>
+      <p id="photo-note" class="muted small" role="status"></p>
+      <div id="photo-grid" class="photo-grid"></div>
+      <p id="no-photos" class="empty" data-i18n="noPhotos"></p>
+      <a class="secondary" href="/album" data-i18n="photoAlbum"></a>
+    </section>
+
+    <section id="panel-ask" role="tabpanel" aria-labelledby="tab-ask" class="panel" hidden>
+      <div class="catchup" id="catchup" role="group" aria-labelledby="catchup-label">
+        <h2 id="catchup-label" data-i18n="catchUp"></h2>
+        <div class="chips">
+          <button type="button" class="chip" data-minutes="2" data-i18n="last2"></button>
+          <button type="button" class="chip" data-minutes="5" data-i18n="last5"></button>
+          <button type="button" class="chip" data-minutes="" data-i18n="wholeTalk"></button>
+          <button type="button" class="chip" id="glossary-chip" data-i18n="glossaryChip"></button>
+        </div>
+      </div>
+      <div id="answers" class="answers" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <form id="ask-form" class="composer" hidden>
+    <div class="ask-target" role="radiogroup" aria-labelledby="ask-target-label">
+      <span id="ask-target-label" class="sr-only" data-i18n="targetLabel"></span>
+      <label><input type="radio" name="ask-target" value="ai" checked><span data-i18n="targetAi"></span></label>
+      <label><input type="radio" name="ask-target" value="speaker"><span data-i18n="targetSpeaker"></span></label>
+    </div>
+    <p class="composer-note">
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm3 8H9V7a3 3 0 0 1 6 0z"/></svg>
+      <span id="composer-note"></span>
+    </p>
+    <div class="composer-row">
+      <label for="question" class="sr-only" data-i18n="questionLabel"></label>
+      <textarea id="question" rows="1" maxlength="500" enterkeyhint="send"></textarea>
+      <button class="primary" type="submit" id="ask-send"></button>
+    </div>
+  </form>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" id="tab-transcript" aria-controls="panel-transcript" aria-selected="true">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h10"/></svg>
+      <span data-i18n="tabTranscript"></span>
+    </button>
+    <button role="tab" id="tab-live" aria-controls="panel-live" aria-selected="false" tabindex="-1">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M9 21h6"/></svg>
+      <span data-i18n="tabSlide"></span>
+    </button>
+    <button role="tab" id="tab-chat" aria-controls="panel-chat" aria-selected="false" tabindex="-1">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 12a8 8 0 0 1 8-8h2a8 8 0 0 1 0 16H6l-3 2z"/></svg>
+      <span data-i18n="tabChat"></span>
+    </button>
+    <button role="tab" id="tab-ask" aria-controls="panel-ask" aria-selected="false" tabindex="-1">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 5h16v11H9l-5 4z"/></svg>
+      <span data-i18n="tabAsk"></span>
+    </button>
+    <button role="tab" id="tab-photos" aria-controls="panel-photos" aria-selected="false" tabindex="-1">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      <span data-i18n="tabPhotos"></span>
+    </button>
+  </nav>
+
+  <div id="sr-captions" class="sr-only" aria-live="polite" aria-atomic="false"></div>
+
+  <dialog id="settings" aria-labelledby="settings-title">
+    <form method="dialog" class="settings">
+      <h2 id="settings-title" data-i18n="settings"></h2>
+
+      <label for="set-ui" data-i18n="appLanguage"></label>
+      <select id="set-ui">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+      </select>
+      <p id="translation-note" class="muted" hidden data-i18n="translationNote"></p>
+
+      <label for="set-size" data-i18n="captionSize"></label>
+      <input id="set-size" type="range" min="14" max="40" step="2">
+
+      <label class="check" id="voice-row"><input id="set-voice" type="checkbox"> <span data-i18n="listenTranslated"></span></label>
+      <p class="muted" id="voice-note" data-i18n="voiceNote"></p>
+
+      <label class="check"><input id="set-captions" type="checkbox"> <span data-i18n="showCaptions"></span></label>
+      <label class="check"><input id="set-sign" type="checkbox"> <span data-i18n="signAvatar"></span></label>
+      <p class="muted" data-i18n="signNote"></p>
+      <label class="check"><input id="set-contrast" type="checkbox"> <span data-i18n="highContrast"></span></label>
+      <label class="check"><input id="set-audio-only" type="checkbox"> <span data-i18n="audioOnly"></span></label>
+      <p class="muted" data-i18n="audioOnlyNote"></p>
+
+      <button class="primary" value="close" data-i18n="done"></button>
+    </form>
+  </dialog>
+
+  <script src="/lib/signalr.min.js"></script>
+  <script src="/lib/hls.min.js"></script>
+  <script src="/whep.js"></script>
+  <script src="/ui.js"></script>
+  <script src="/signing.js"></script>
+  <script src="/attendee.js"></script>
+</body>
+</html>

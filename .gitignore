@@ -1,0 +1,17 @@
+bin/
+obj/
+node_modules/
+.env
+# Runtime data: talks, operator key, private certificate
+data/
+# Downloaded by the start scripts
+tools/
+models/
+tests/e2e/out/
+# Keys and certificates never leave the laptop
+*.key
+*.pfx
+*.p8
+*.pem
+*.db
+*.db-*

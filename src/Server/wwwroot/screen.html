@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0e14">
+  <title>Room screen</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="screen">
+  <header class="screen-head">
+    <div>
+      <p id="room" class="muted"></p>
+      <h1 id="title"></h1>
+      <p id="speaker" class="muted"></p>
+    </div>
+    <span id="live" class="pill" data-state="waiting"></span>
+  </header>
+
+  <main class="screen-main">
+    <section class="spotlight" aria-live="polite">
+      <div id="round-view" class="screen-round" hidden>
+        <p class="screen-poll-head" data-i18n="roundHead"></p>
+        <h2 data-i18n="roundTitle"></h2>
+        <p data-i18n="roundText"></p>
+        <p id="round-left" class="screen-round-left"></p>
+      </div>
+      <div id="poll-view" class="screen-poll" hidden></div>
+      <figure id="photo-view" class="screen-photo" hidden>
+        <img id="photo-img" alt="">
+        <figcaption id="photo-alt"></figcaption>
+        <span id="photo-new" class="screen-new" data-i18n="newPhoto" hidden></span>
+      </figure>
+      <p id="idle" class="screen-idle" data-i18n="idle"></p>
+    </section>
+    <aside class="screen-side">
+      <img id="qr" class="screen-qr" alt="">
+      <p class="screen-join" data-i18n="join"></p>
+      <p id="join-url" class="muted"></p>
+      <ul class="screen-hints">
+        <li><span aria-hidden="true">👏 🔥 🤯 ❓</span> <span data-i18n="hintReact"></span></li>
+        <li><span aria-hidden="true">📸</span> <span data-i18n="hintPhoto"></span></li>
+        <li><span aria-hidden="true">💬</span> <span data-i18n="hintAsk"></span></li>
+      </ul>
+    </aside>
+  </main>
+
+  <section id="captions" class="screen-captions" aria-live="off"></section>
+  <div id="float-layer" class="float-layer"></div>
+
+  <script src="/lib/signalr.min.js"></script>
+  <script src="/ui.js"></script>
+  <script src="/screen.js"></script>
+</body>
+</html>

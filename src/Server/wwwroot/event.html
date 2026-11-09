@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>Agenda</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/story.css">
+</head>
+<body class="page drift">
+  <div id="page-nav"></div>
+  <header class="page-head">
+    <h1 id="event-name"></h1>
+    <p id="event-where" class="muted"></p>
+    <p id="event-about"></p>
+  </header>
+  <a id="register-cta" class="primary wide" href="/me" hidden data-i18n="getTicket"></a>
+  <section class="find" id="find" hidden>
+    <h2 id="find-title" data-i18n="findTitle"></h2>
+    <div class="find-field"><input id="find-input" type="search" enterkeyhint="search" autocomplete="off" aria-labelledby="find-title"></div>
+  </section>
+  <div id="find-results" aria-live="polite"></div>
+  <main id="agenda" aria-live="polite"></main>
+  <script src="/lib/signalr.min.js"></script>
+  <script src="/ui.js"></script>
+  <script src="/event.js"></script>
+</body>
+</html>

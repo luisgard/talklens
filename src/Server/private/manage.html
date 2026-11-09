@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>TalkLens set up</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="console">
+  <script src="/console-nav.js"></script>
+  <header class="console-head">
+    <div class="console-title"><h1>Set up your event</h1></div>
+  </header>
+
+  <nav class="stepper" aria-label="Setup steps">
+    <a href="#event" data-to="event"><span>1</span> Your event</a>
+    <a href="#talks" data-to="talks"><span>2</span> Talks</a>
+    <a href="#people" data-to="people"><span>3</span> Guest list</a>
+    <a href="#sponsors" data-to="sponsors"><span>4</span> Sponsors <small>optional</small></a>
+    <a href="#settings" data-to="settings"><span>5</span> Privacy <small>optional</small></a>
+  </nav>
+
+  <div data-step="event">
+    <section class="card">
+      <h2>Your event</h2>
+      <p class="muted">Attendees see this on their phones. You can change it at any time.</p>
+      <form id="event-form">
+        <label for="name">Event name</label><input id="name" maxlength="120" placeholder="Cloud Native Meetup">
+        <div class="field-row">
+          <div><label for="venue">Where</label><input id="venue" maxlength="200" placeholder="The Shop, Salt Lake City"></div>
+          <div><label for="dates">When</label><input id="dates" maxlength="120" placeholder="Monday, November 9"></div>
+        </div>
+        <label for="about">A sentence about it <small>(optional)</small></label><textarea id="about" rows="2" maxlength="1000"></textarea>
+        <div class="actions step-footer"><span id="event-saved" class="muted"></span><button class="primary">Save and continue</button></div>
+      </form>
+    </section>
+  </div>
+
+  <div data-step="talks">
+    <section class="card">
+      <h2>Add your talks</h2>
+      <p class="muted">This is the schedule people see. If you only have one talk, skip this: you can name it when you go live.</p>
+      <form id="agenda-form">
+        <div class="field-row">
+          <div><label for="a-title">Talk title</label><input id="a-title" required maxlength="200"></div>
+          <div><label for="a-speaker">Speaker</label><input id="a-speaker" maxlength="200"></div>
+        </div>
+        <div class="field-row">
+          <div><label for="a-start">Starts</label><input id="a-start" type="datetime-local" required></div>
+          <div><label for="a-end">Ends</label><input id="a-end" type="datetime-local" required></div>
+        </div>
+        <label for="a-room">Room</label><select id="a-room"></select>
+        <details class="more"><summary>Add a description</summary><input id="a-about" maxlength="500" aria-label="Description of the talk"></details>
+        <p id="agenda-error" class="error" role="alert"></p>
+        <div class="actions"><button class="primary">Add this talk</button></div>
+      </form>
+      <div id="agenda"></div>
+    </section>
+    <section class="card">
+      <h2>Rooms</h2>
+      <p class="muted">Talks at the same time need one room each. Set how many people fit, and when a room fills up the schedule says so and offers the live stream instead.</p>
+      <div id="limits"></div>
+      <form id="room-form" class="composer-row room-add">
+        <input id="room-new" maxlength="60" placeholder="Name of another room" aria-label="Name of another room" autocomplete="off">
+        <button class="secondary">Add room</button>
+      </form>
+    </section>
+    <div class="actions step-footer"><a class="secondary" href="#event">Back</a><a class="primary" href="#people">Next: guest list</a></div>
+  </div>
+
+  <div data-step="people">
+    <section class="card">
+      <h2>Add your guest list</h2>
+      <p class="muted" id="attendee-count"></p>
+      <div class="step">
+        <div class="step-number">A</div>
+        <div>
+          <h3>If you use Luma</h3>
+          <p>Open your event in Luma, go to its guests, and download the list as a CSV file. Then upload that file here.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">B</div>
+        <div>
+          <h3>If you don't</h3>
+          <p><a href="/api/op/import/template.csv">Download our template</a>, open it in Excel or Google Sheets, write one person per row with their name and email, and save it as CSV.</p>
+        </div>
+      </div>
+      <div class="actions upload-row">
+        <label class="primary file-button">Upload the CSV file<input id="csv" type="file" accept=".csv,text/csv" hidden></label>
+      </div>
+      <p id="import-result" class="import-result" role="status" hidden></p>
+      <p class="muted small">At the door, your team finds each person by name or email, so nobody needs a QR code. Uploading the same list again only adds who is new.</p>
+      <details class="more">
+        <summary>Add one person by hand</summary>
+        <form id="add-form" class="field-row">
+          <div><label for="p-name">Name</label><input id="p-name" maxlength="80"></div>
+          <div><label for="p-email">Email</label><input id="p-email" type="email"></div>
+          <div class="field-button"><button class="secondary">Add</button></div>
+        </form>
+      </details>
+    </section>
+    <section class="card">
+      <h2>Everyone on the list</h2>
+      <input id="filter" placeholder="Find a person" aria-label="Find a person" autocomplete="off">
+      <div id="attendees"></div>
+      <div class="qr" id="desk-ticket" hidden style="max-width:220px"></div>
+      <details class="more">
+        <summary>Download the list, email and delete</summary>
+        <div class="actions">
+          <a class="secondary" href="/api/op/export/attendees.csv">Download who arrived</a>
+          <a class="secondary" href="/api/op/export/attendance.csv">Download attendance by talk</a>
+          <button id="send-contacts" class="secondary" type="button">Email people their contacts</button>
+          <button id="purge" class="danger" type="button">Delete everyone's data</button>
+        </div>
+        <p id="mail-note" class="muted" style="margin-top:10px"></p>
+      </details>
+      <details class="more"><summary>Connect Luma directly (paid Luma plan)</summary>
+        <p class="muted" id="luma-note"></p>
+        <form id="luma-form" class="composer-row">
+          <input id="luma-id" placeholder="evt-..." aria-label="Luma event ID" autocomplete="off">
+          <button class="secondary">Import from Luma</button>
+        </form>
+      </details>
+    </section>
+    <div class="actions step-footer"><a class="secondary" href="#talks">Back</a><a class="primary" href="/start">Done, back to home</a></div>
+  </div>
+
+  <div data-step="sponsors">
+    <section class="card">
+      <h2>Sponsors <small class="muted">optional</small></h2>
+      <p class="muted">Add a sponsor and the words to listen for. You get a report of when talks and chat mentioned them, and a QR code for their stand.</p>
+      <form id="sponsor-form" class="field-row">
+        <div><label for="s-name">Sponsor name</label><input id="s-name" maxlength="80"></div>
+        <div><label for="s-keys">Words to look for, separated by commas</label><input id="s-keys" maxlength="300"></div>
+        <div class="field-button"><button class="secondary">Add sponsor</button></div>
+      </form>
+      <div id="sponsors"></div>
+    </section>
+    <div class="actions step-footer"><a class="secondary" href="/start">Back to home</a></div>
+  </div>
+
+  <div data-step="settings">
+    <section class="card">
+      <h2>Privacy and access <small class="muted">optional</small></h2>
+      <p class="muted">The defaults are safe. Change these only if you need to.</p>
+      <form id="access-form">
+        <label for="library">Code to open the library of past talks. Leave it empty to let anyone on the event Wi-Fi in.</label><input id="library" autocomplete="off">
+        <label class="check"><input id="community" type="checkbox"> Turn on the event-wide chat and networking</label>
+        <label class="check"><input id="sign-always" type="checkbox"> Sign every kept talk with the experimental avatar, even when nobody turns it on, so recordings are signed from start to end. Each talk then costs more AI calls.</label>
+        <label class="check"><input id="photos-auto" type="checkbox"> Publish shared photos without waiting for me. The AI still holds back any it would not show on a projector, and anyone in a photo can take it down at once.</label>
+        <label for="spots">Where people can meet, one per line <small>(optional)</small></label>
+        <textarea id="spots" rows="3" maxlength="600" placeholder="Coffee area&#10;Sponsor tables&#10;Main entrance"></textarea>
+        <p class="muted small">When someone accepts a request to meet, they pick one of these. Leave it empty and phones offer the entrance, the coffee area and outside the room.</p>
+        <div class="field-row">
+          <div><label for="min">Hide report numbers from groups smaller than</label><input id="min" type="number" min="1"></div>
+          <div><label for="hall">Hours people can keep chatting after a talk</label><input id="hall" type="number" min="0"></div>
+        </div>
+        <details class="more">
+          <summary>People outside the venue (technical)</summary>
+          <p class="muted">Off by default. It needs a tunnel you run yourself, such as: cloudflared tunnel --url http://localhost:8080</p>
+          <label class="check"><input id="remote" type="checkbox"> Let people outside the venue follow captions, transcript and slides</label>
+          <label class="check"><input id="remote-video" type="checkbox"> Also send the video outside. The speaker agreed, and the internet link can carry it.</label>
+          <label for="remote-url">Public address of your tunnel</label><input id="remote-url" autocomplete="off">
+        </details>
+        <div class="actions"><button class="primary">Save</button><span id="access-saved" class="muted"></span></div>
+      </form>
+      <details class="more">
+        <summary>API and widget for streaming platforms (technical)</summary>
+        <p class="muted">See docs/API.md. The key gives read access to kept talks.</p>
+        <div class="actions"><code id="api-key"></code><button id="new-key" class="secondary" type="button">Create a new key</button><button id="drop-key" class="secondary" type="button">Turn off the API</button></div>
+      </details>
+    </section>
+    <div class="actions step-footer"><a class="secondary" href="/start">Back to home</a></div>
+  </div>
+  <script src="/manage.js"></script>
+</body>
+</html>

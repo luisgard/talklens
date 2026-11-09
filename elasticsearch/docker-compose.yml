@@ -1,0 +1,24 @@
+# Elasticsearch for TalkLens, on this laptop only. Start it with: docker compose -f elasticsearch/docker-compose.yml up -d
+# Security is off because the port only answers on this machine, like start-local's own setup. Phones never reach it.
+# The heap keeps it from taking over a laptop that also has to serve video. 1 GB holds a whole event.
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+    container_name: talklens-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      # Leaves it answering when the disk is nearly full, instead of going read-only in the middle of an event.
+      - cluster.routing.allocation.disk.watermark.low=95%
+      - cluster.routing.allocation.disk.watermark.high=97%
+      - cluster.routing.allocation.disk.watermark.flood_stage=98%
+    ports:
+      - "127.0.0.1:9200:9200"
+    volumes:
+      - talklens-elasticsearch:/usr/share/elasticsearch/data
+    mem_limit: 2g
+    restart: unless-stopped
+
+volumes:
+  talklens-elasticsearch:

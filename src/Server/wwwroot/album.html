@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>Photos</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="page drift">
+  <div id="page-nav"></div>
+  <header class="page-head">
+    <h1 data-i18n="title"></h1>
+    <p class="muted" data-i18n="intro"></p>
+  </header>
+  <main>
+    <div class="album-tools">
+      <label for="talk-filter" class="sr-only" data-i18n="filter"></label>
+      <select id="talk-filter"></select>
+      <a class="secondary" href="/api/photos.zip" download data-i18n="download"></a>
+    </div>
+    <div id="grid" class="photo-grid album-grid"></div>
+    <p id="empty" class="empty" data-i18n="empty" hidden></p>
+  </main>
+  <dialog id="viewer" class="photo-view" aria-label="Photo">
+    <img id="viewer-img" alt="">
+    <p id="viewer-alt" class="alt muted small"></p>
+    <div class="actions">
+      <button id="like" class="secondary" type="button"></button>
+      <button id="report" class="secondary" type="button" data-i18n="report"></button>
+      <button id="remove" class="secondary" type="button" data-i18n="remove" hidden></button>
+      <button id="close" class="primary" type="button" data-i18n="close"></button>
+    </div>
+    <p id="viewer-note" class="muted small" role="status"></p>
+  </dialog>
+  <script src="/lib/signalr.min.js"></script>
+  <script src="/ui.js"></script>
+  <script src="/album.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>TalkLens check-in</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="console">
+  <script src="/console-nav.js"></script>
+  <header class="console-head">
+    <div class="console-title">
+      <h1>Check-in</h1>
+      <p class="muted" id="count"></p>
+    </div>
+  </header>
+  <section class="card">
+    <label for="search" class="door-label">Find the person by name or email</label>
+    <input id="search" class="door-search" placeholder="Type a name or email" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
+    <p id="result" class="scan-result" role="status" aria-live="assertive" hidden></p>
+    <div id="matches"></div>
+    <form id="walk-in" class="walk-in" hidden>
+      <h3>Not on the list? Add them</h3>
+      <div class="field-row">
+        <div><label for="walk-name">Name</label><input id="walk-name" required maxlength="80" autocomplete="off"></div>
+        <div><label for="walk-email">Email</label><input id="walk-email" type="email" required autocomplete="off"></div>
+      </div>
+      <p id="walk-error" class="error" role="alert"></p>
+      <div class="actions"><button class="primary">Add and check in</button></div>
+    </form>
+  </section>
+  <details class="card more door-more" id="scan-box">
+    <summary>Scan a QR ticket instead</summary>
+    <p id="camera-note" class="muted"></p>
+    <div class="scanner"><video id="camera" playsinline muted></video></div>
+  </details>
+  <details class="card more door-more">
+    <summary>Use another phone at the door</summary>
+    <p class="muted">Scan this with a team phone. It works with no internet. The phone may warn that the connection is not private: that is normal here, so choose to continue. Only share it with your team, because it opens the organizer pages.</p>
+    <div class="qr" style="max-width:200px"><img src="/api/op/qr/checkin.svg" alt="QR code to open check-in on another phone" loading="lazy"></div>
+  </details>
+  <details class="card more door-more">
+    <summary>Counting people at a room's door</summary>
+    <p class="muted">Leave this on Event entrance unless you are counting who goes into each room.</p>
+    <label for="where">Checking in at</label>
+    <select id="where"></select>
+  </details>
+  <script src="/lib/jsQR.js"></script>
+  <script src="/checkin.js"></script>
+</body>
+</html>

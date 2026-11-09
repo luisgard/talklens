@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0e14">
+  <title>TalkLens speaker screen</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="speaker-screen">
+  <p id="room" class="muted"></p>
+  <p id="pace" class="pace" hidden aria-live="assertive"></p>
+  <main aria-live="polite">
+    <p id="question" class="speaker-question"></p>
+    <p id="asked" class="muted"></p>
+  </main>
+  <section id="later" class="card" hidden>
+    <h2>Questions left over</h2>
+    <p class="muted">Attendees see your answers in the talk's hallway.</p>
+    <div id="later-list"></div>
+  </section>
+  <script src="/lib/signalr.min.js"></script>
+  <script src="/speaker.js"></script>
+</body>
+</html>

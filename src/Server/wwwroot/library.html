@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>Library</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="page drift">
+  <div id="page-nav"></div>
+  <header class="page-head">
+    <h1 data-i18n="title"></h1>
+    <p class="muted" data-i18n="intro"></p>
+  </header>
+  <section class="card" id="locked" hidden>
+    <p class="muted" data-i18n="lockedText"></p>
+    <form id="code-form" class="composer-row" style="margin-top:12px">
+      <input id="code" autocomplete="off" aria-label="Library code">
+      <button class="primary" data-i18n="unlock"></button>
+    </form>
+  </section>
+  <form id="search-form" class="card composer-row">
+    <input id="query" data-i18n-placeholder="searchPlaceholder" aria-label="Search all talks" maxlength="500" autocomplete="off">
+    <button class="primary" data-i18n="ask"></button>
+  </form>
+  <div id="answer"></div>
+  <main id="results" aria-live="polite"></main>
+  <h2 class="section-title" data-i18n="allTalks"></h2>
+  <div id="talks" class="room-list"></div>
+  <script src="/ui.js"></script>
+  <script src="/library.js"></script>
+</body>
+</html>

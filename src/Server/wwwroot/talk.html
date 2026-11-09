@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>Talk</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="page drift">
+  <div id="page-nav"></div>
+  <header class="page-head">
+    <h1 id="title"></h1>
+    <p id="who" class="muted"></p>
+    <a id="watch" class="primary" hidden data-i18n="watchLive"></a>
+  </header>
+  <main id="content">
+    <section class="card" id="locked" hidden>
+      <h2 data-i18n="lockedTitle"></h2>
+      <p class="muted" data-i18n="lockedText"></p>
+      <form id="code-form" class="composer-row" style="margin-top:12px">
+        <input id="code" autocomplete="off" aria-label="Library code">
+        <button class="primary" data-i18n="unlock"></button>
+      </form>
+      <a class="secondary" href="/me" data-i18n="useTicket" style="margin-top:10px"></a>
+    </section>
+    <div id="open" hidden>
+      <section class="card replay" id="replay-card" hidden>
+        <div class="replay-stage">
+          <video id="replay" controls playsinline preload="metadata"></video>
+          <div id="sign-pip" class="sign-pip" hidden><div class="CWASAAvatar av0"></div></div>
+        </div>
+        <p id="replay-note" class="muted small"></p>
+        <div class="replay-tools">
+          <label for="sub-language" data-i18n="subtitles"></label>
+          <select id="sub-language"></select>
+          <button id="sub-download" class="secondary" type="button" data-i18n="downloadSubtitles" hidden></button>
+        </div>
+        <p id="sub-note" class="muted small" role="status"></p>
+        <label id="sign-toggle" class="check" hidden><input id="set-sign" type="checkbox"> <span data-i18n="signAvatar"></span></label>
+        <p id="sign-status" class="muted small" hidden></p>
+      </section>
+      <section class="card" id="chapters-card" hidden>
+        <h2 data-i18n="chaptersTitle"></h2>
+        <ol id="chapters" class="chapters"></ol>
+      </section>
+      <section class="card" id="moments-card" hidden>
+        <h2 data-i18n="momentsTitle"></h2>
+        <ul id="moments" class="peaks"></ul>
+      </section>
+      <section class="card">
+        <h2 data-i18n="summaryTitle"></h2>
+        <div id="summary" class="answer-body muted"></div>
+        <figure id="best-slide" class="slide-card" hidden><img id="best-slide-img" alt=""><figcaption id="best-slide-time" class="muted"></figcaption></figure>
+      </section>
+      <section class="card poll-card" id="rate-card" hidden></section>
+      <section class="card" id="glossary-card" hidden>
+        <h2 data-i18n="glossaryTitle"></h2>
+        <div id="glossary" class="answer-body muted"></div>
+      </section>
+      <section class="card" id="hall-questions-card" hidden>
+        <h2 data-i18n="hallQuestions"></h2>
+        <p class="muted" data-i18n="hallQuestionsNote"></p>
+        <div id="hall-questions"></div>
+      </section>
+      <section class="card">
+        <h2 id="chat-title"></h2>
+        <div id="chat"></div>
+      </section>
+      <section class="card">
+        <h2 data-i18n="askTitle"></h2>
+        <p class="composer-note" data-i18n="askPrivate"></p>
+        <form id="ask-form" class="composer-row">
+          <textarea id="question" rows="1" maxlength="500" data-i18n-placeholder="askPlaceholder" aria-label="Question"></textarea>
+          <button class="primary" data-i18n="send"></button>
+        </form>
+        <div id="answers" class="answers" aria-live="polite"></div>
+      </section>
+      <section class="card">
+        <h2 data-i18n="transcriptTitle"></h2>
+        <ol id="transcript" class="transcript"></ol>
+      </section>
+    </div>
+  </main>
+  <script src="/lib/signalr.min.js"></script>
+  <script src="/ui.js"></script>
+  <script src="/signing.js"></script>
+  <script src="/talk.js"></script>
+</body>
+</html>

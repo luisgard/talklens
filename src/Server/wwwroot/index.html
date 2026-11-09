@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>TalkLens</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/story.css">
+</head>
+<body class="home drift">
+  <header class="home-head">
+    <span class="logo" aria-hidden="true"></span> TalkLens
+    <select id="ui-language" class="language-picker" aria-label="Language">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+    </select>
+  </header>
+
+  <div id="page-nav"></div>
+
+  <section class="hero hero-cinema">
+    <div>
+      <h1 data-i18n="heroTitle"></h1>
+      <p class="muted" data-i18n="heroText"></p>
+      <a class="text-link" href="/welcome" data-i18n="howItWorks"></a>
+    </div>
+    <div class="hero-device" data-scene="captions"></div>
+  </section>
+
+  <main id="rooms" aria-live="polite"></main>
+
+  <section class="tiles">
+    <a class="tile-story reveal" href="/welcome"><h3 data-i18n="tileAskTitle"></h3><p data-i18n="tileAskText"></p><div data-scene="ask"></div></a>
+    <a class="tile-story reveal" href="/welcome"><h3 data-i18n="tileCatchTitle"></h3><p data-i18n="tileCatchText"></p><div data-scene="catchup"></div></a>
+    <a class="tile-story reveal" href="/event"><h3 data-i18n="tileFindTitle"></h3><p data-i18n="tileFindText"></p><div data-scene="search"></div></a>
+  </section>
+  <p class="home-more"><a class="text-link" href="/welcome" data-i18n="howItWorks"></a></p>
+
+  <script src="/lib/signalr.min.js"></script>
+  <script src="/ui.js"></script>
+  <script src="/story.js"></script>
+  <script src="/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>TalkLens reports</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="console">
+  <script src="/console-nav.js"></script>
+  <header class="console-head">
+    <div class="console-title">
+      <h1>Results</h1>
+      <p class="muted">Recordings, clips and reports for speakers and sponsors.</p>
+    </div>
+  </header>
+  <p class="muted" id="minimum"></p>
+  <section class="card">
+    <h2>The event at a glance</h2>
+    <div id="tiles" class="tiles"></div>
+    <div id="best" class="best"></div>
+    <h3>Every talk</h3>
+    <p class="muted small">Tap a column to sort. Dashes are numbers hidden because too few people were involved.</p>
+    <div class="table-wrap"><table id="overview" class="overview"></table></div>
+  </section>
+  <section class="card">
+    <h2>What the audience cared about</h2>
+    <div class="actions"><button id="topics-model" class="secondary" type="button">Summarize topics with AI</button></div>
+    <p class="muted" id="topics-note"></p>
+    <div id="topics"></div>
+    <div id="by-talk"></div>
+  </section>
+  <section class="card">
+    <h2>Feedback for the speaker</h2>
+    <label for="talk">Talk</label><select id="talk"></select>
+    <div id="feedback"></div>
+  </section>
+  <section class="card">
+    <h2>Sponsors</h2>
+    <label for="sponsor">Sponsor</label><select id="sponsor"></select>
+    <div id="sponsor-report"></div>
+  </section>
+  <section class="card">
+    <h2>Clips</h2>
+    <p class="muted">Made automatically when a recorded talk ends, vertical and with captions. They stay on this laptop until you download them.</p>
+    <div id="clips"></div>
+  </section>
+  <script src="/reports.js"></script>
+</body>
+</html>

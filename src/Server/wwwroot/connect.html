@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>Connect</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="page drift">
+  <div id="page-nav"></div>
+  <header class="page-head">
+    <h1 data-i18n="title"></h1>
+    <p class="muted" data-i18n="intro"></p>
+  </header>
+
+  <div class="segmented glass" role="tablist" aria-label="Connect">
+    <button role="tab" id="tab-people" aria-controls="panel-people" aria-selected="true" data-i18n="people"></button>
+    <button role="tab" id="tab-offers" aria-controls="panel-offers" aria-selected="false" tabindex="-1" data-i18n="offers"></button>
+  </div>
+
+  <section id="panel-people" role="tabpanel" aria-labelledby="tab-people" class="connect-panel">
+    <article id="my-card" class="card profile-card"></article>
+    <div id="people"></div>
+  </section>
+
+  <section id="panel-offers" role="tabpanel" aria-labelledby="tab-offers" class="connect-panel" hidden>
+    <div id="offers"></div>
+  </section>
+
+  <script src="/ui.js"></script>
+  <script src="/connect.js"></script>
+</body>
+</html>

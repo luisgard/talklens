@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0e14">
+  <title>TalkLens live overview</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="console">
+  <script src="/console-nav.js"></script>
+  <header class="console-head">
+    <div class="console-title">
+      <h1>Live view</h1>
+      <p class="muted">Where people are and what they care about, right now.</p>
+    </div>
+  </header>
+  <section class="now" aria-labelledby="now-title">
+    <h2 id="now-title" class="section-title">Now</h2>
+    <div class="now-grid">
+      <article class="card now-card" id="now-alone"></article>
+      <article class="card now-card" id="now-sponsors"></article>
+      <article class="card now-card" id="now-meetings"></article>
+      <article class="card now-card" id="now-rooms"></article>
+    </div>
+  </section>
+  <section class="stat-row" id="totals"></section>
+  <section class="card"><h2>Most interest right now</h2><div id="interest"></div></section>
+  <section class="card"><h2>Rooms</h2><div id="rooms" class="room-grid"></div></section>
+  <script src="/organizer.js"></script>
+</body>
+</html>

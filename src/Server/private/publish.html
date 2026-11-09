@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0e14">
+  <title>TalkLens camera</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="console publisher">
+  <header class="console-head">
+    <h1 id="heading">Camera</h1>
+    <span id="pill" class="pill" data-state="waiting">Not sending</span>
+  </header>
+  <video id="preview" muted autoplay playsinline></video>
+  <section class="card" style="margin-top:12px">
+    <p id="error" class="error" role="alert"></p>
+    <button id="start" class="primary big" type="button">Start sending</button>
+    <button id="stop" class="danger big" type="button" hidden>Stop</button>
+    <ul>
+      <li>Keep this page open and the screen on, with the phone plugged in.</li>
+      <li>If the connection drops, it comes back by itself.</li>
+    </ul>
+    <details class="more">
+      <summary>Options</summary>
+      <div class="field-row" id="source-row">
+        <div>
+          <label for="source">Source</label>
+          <select id="source"></select>
+        </div>
+        <div>
+          <label for="quality">Quality</label>
+          <select id="quality">
+            <option value="720">720p (about 2 Mbps per viewer)</option>
+            <option value="480">480p (for a busy Wi-Fi)</option>
+          </select>
+        </div>
+      </div>
+    </details>
+  </section>
+  <script src="/whep.js"></script>
+  <script src="/publish.js"></script>
+</body>
+</html>
